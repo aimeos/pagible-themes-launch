@@ -51,7 +51,7 @@ class LaunchDemoTest extends ThemeTestAbstract
 
         $response = $this->get( '/' );
 
-        $response->assertSee( '<a href="http://localhost/login">Sign in</a>', false );
+        $response->assertSee( '<a href="http://localhost/login" title="Login" aria-label="Login">', false );
         $response->assertSee( '<a href="http://localhost/register">Get started</a>', false );
     }
 
@@ -101,7 +101,7 @@ class LaunchDemoTest extends ThemeTestAbstract
         $response->assertSee( '"priceCurrency": "USD"', false );
         $response->assertSee( 'class="topbar"', false );
         $response->assertSee( 'Relay 3.0 is here: AI incident summaries' );
-        $response->assertSee( '<li class="signin">', false );
+        $response->assertSee( '<li class="login">', false );
         $response->assertSee( '<li class="signup">', false );
         $response->assertSee( 'Get started' );
         $response->assertSee( 'System status' );
