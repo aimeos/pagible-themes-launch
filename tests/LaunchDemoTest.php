@@ -43,6 +43,19 @@ class LaunchDemoTest extends ThemeTestAbstract
     }
 
 
+    public function testAuthRoutes() : void
+    {
+        \Illuminate\Support\Facades\Route::get( '/login', fn() => '' )->name( 'login' );
+        \Illuminate\Support\Facades\Route::get( '/register', fn() => '' )->name( 'register' );
+        app( 'router' )->getRoutes()->refreshNameLookups();
+
+        $response = $this->get( '/' );
+
+        $response->assertSee( '<a href="http://localhost/login">Sign in</a>', false );
+        $response->assertSee( '<a href="http://localhost/register">Get started</a>', false );
+    }
+
+
     public function testBlog() : void
     {
         $response = $this->get( '/blog' );

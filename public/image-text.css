@@ -30,15 +30,16 @@
 }
 
 .image-text .cms-text li {
-    display: flex;
-    gap: 0.625rem;
+    position: relative;
     margin-bottom: 0.5rem;
+    padding-inline-start: 1.625rem;
     list-style: none;
 }
 
 .image-text .cms-text li::before {
     content: "";
-    flex-shrink: 0;
+    position: absolute;
+    inset-inline-start: 0;
     width: 1rem;
     height: 1rem;
     margin-top: 0.3em;

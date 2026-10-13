@@ -388,10 +388,6 @@ header nav ul.menu > li.signup {
     order: 2;
 }
 
-header nav ul.menu > li.login {
-    order: 3;
-}
-
 header nav a:not([role]):hover,
 header nav a:not([role]):focus,
 header nav a:not([role]):active {
@@ -547,7 +543,7 @@ header nav .sidebar-close button {
         width: 100%;
     }
 
-    header nav.small .menu > li:not(.login, .signin, .signup) {
+    header nav.small .menu > li:not(.signin, .signup) {
         border-bottom: 1px solid var(--pico-muted-border-color);
     }
 

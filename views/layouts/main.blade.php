@@ -208,23 +208,14 @@
                             @endif
                         </li>
                     @endforeach
-                    @if($signin = cmslink($product->signin ?? null))
+                    @if($signin = Route::has('login') ? route('login') : cmslink($product->signin ?? null))
                         <li class="signin">
                             <a href="{{ $signin }}">{{ __('Sign in') }}</a>
                         </li>
                     @endif
-                    @if($signup = cmslink($product->signup ?? null))
+                    @if($signup = Route::has('register') ? route('register') : cmslink($product->signup ?? null))
                         <li class="signup">
                             <a href="{{ $signup }}">{{ __('Get started') }}</a>
-                        </li>
-                    @endif
-                    @if(Route::has('login'))
-                        <li class="login">
-                            <a href="{{ route('login') }}" title="{{ __('Login') }}" aria-label="{{ __('Login') }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" />
-                                </svg>
-                            </a>
                         </li>
                     @endif
                 </ul>

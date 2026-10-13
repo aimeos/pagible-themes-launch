@@ -27,9 +27,9 @@
         grid-template-columns: repeat(4, 1fr);
     }
 
-    /* Bento grid: first and fourth card span two columns */
-    main .cards .card-list.layout-cards.cols-3 > .card-item:nth-child(4n + 1):not(:last-child),
-    main .cards .card-list.layout-cards.cols-3 > .card-item:nth-child(4n + 4) {
+    /* Bento grid for an even number of cards: first and fourth card span two columns */
+    main .cards .card-list.layout-cards.cols-3:has(> .card-item:last-child:nth-child(even)) > .card-item:nth-child(4n + 1),
+    main .cards .card-list.layout-cards.cols-3:has(> .card-item:last-child:nth-child(even)) > .card-item:nth-child(4n + 4) {
         grid-column: span 2;
     }
 }
@@ -75,13 +75,19 @@
     opacity: 1;
 }
 
-.cards .card-item :is(picture.image, .card-image) {
+.cards .card-item > :is(picture.image, .card-image) {
     display: block;
+    width: calc(100% + 3.5rem);
+    max-width: none;
     margin: -1.75rem -1.75rem 1.5rem;
     overflow: hidden;
     aspect-ratio: 16 / 9;
     background-color: var(--pico-card-sectioning-background-color);
     border-bottom: 1px solid var(--pico-muted-border-color);
+}
+
+.cards .layout-cards .card-image picture.image {
+    height: 100%;
 }
 
 .cards .card-item picture.image img {
@@ -203,6 +209,8 @@
 
 .cards .card-list:is(.layout-badges, .layout-figures) .card-item :is(picture, .card-image) {
     display: block;
+    width: auto;
+    max-width: 100%;
     height: auto;
     margin: 0 0 0.75rem;
     overflow: visible;

@@ -62,6 +62,8 @@ class LaunchDemo extends AbstractDemo
     ];
 
     private string $blogId;
+    /** @var array<string, string> */
+    private array $brands = [];
     private string $element;
     /** @var array<string, string> */
     private array $icons = [];
@@ -163,18 +165,61 @@ class LaunchDemo extends AbstractDemo
             'title' => 'On-Call Without Burnout: Seven Changes That Make Rotations Fair',
             'path' => 'on-call-without-burnout',
         ], 'On-call without burnout',
-            "Most on-call pain doesn't come from real outages. It comes from noisy alerts, unclear ownership and rotations that always land on the same three people.\n\nThese are the seven changes we see most often in teams that get paged less, sleep better and still catch every real incident.",
+            "Most on-call pain doesn't come from real outages. It comes from noisy alerts, unclear ownership and rotations that always land on the same three people.\n\nWe looked at the schedules and alert history of 600 teams on Relay. The teams that got paged least shared seven habits, and none of them needed a bigger team or a new tool to start.",
             'meeting',
             [
-                ['title' => '−72%', 'text' => 'Fewer pages after confirming alerts from three regions'],
-                ['title' => '1 week', 'text' => 'Rotation length most teams settle on'],
-                ['title' => '15 min', 'text' => 'Escalation delay before the backup is paged'],
-            ],
-            "## 1. Page only for what users notice\n\nIf a check can fail without anyone noticing, it should create a ticket, not a phone call. Split your monitors into **urgent** and **next business day** and route them differently.\n\n## 2. Confirm before you page\n\nA single failed request from one region is usually the network, not your app. Relay waits for a second region to confirm before it wakes anyone up.\n\n## 3. Write down who owns what\n\nEvery monitor should belong to a team, and every team needs a schedule. When an alert has no owner, it ends up with whoever is most worried.\n\n## 4. Pay for nights and weekends\n\nTime off in lieu or a flat on-call allowance makes rotations fairer and keeps experienced people in the schedule.",
-            [
-                ['title' => 'How many people do we need for a rotation?', 'text' => 'At least four, so nobody is on call more than one week a month. With fewer people, share a rotation with another team.'],
-                ['title' => 'Should managers be on call?', 'text' => 'Yes, as the second escalation level. It keeps them close to the alert quality their team deals with.'],
-                ['title' => 'What about follow-the-sun?', 'text' => 'If your team spans time zones, hand over at the end of each working day. Relay supports up to three handovers a day.'],
+                ['id' => Utils::uid(), 'type' => 'cards', 'group' => 'main', 'data' => [
+                    'layout' => 'figures',
+                    'columns' => '3',
+                    'cards' => [
+                        ['title' => '−72%', 'text' => 'Fewer pages after confirming alerts from three regions'],
+                        ['title' => '1 week', 'text' => 'Rotation length most teams settle on'],
+                        ['title' => '15 min', 'text' => 'Escalation delay before the backup is paged'],
+                    ],
+                ]],
+                ['id' => Utils::uid(), 'type' => 'toc', 'group' => 'main', 'data' => [
+                    'title' => 'The seven changes',
+                ]],
+                ...$this->section( 'Page only for what users notice', "If a check can fail without anyone noticing, it should create a ticket, not a phone call. Split your monitors into **urgent** and **next business day** and route them differently. A full disk on a build server is annoying. A checkout that returns errors is an emergency.\n\nA good test: would you call a colleague at 3 am for this? If the honest answer is no, the alert shouldn't do it either." ),
+                ...$this->section( 'Confirm before you page', "A single failed request from one region is usually the network, not your app. Relay waits for a second region to confirm before it wakes anyone up. In our data, this one setting removes almost three out of four night-time pages, while real outages are still reported within a minute." ),
+                ['id' => Utils::uid(), 'type' => 'heading', 'group' => 'main', 'data' => [
+                    'title' => 'Write down who owns what',
+                    'level' => '2',
+                ]],
+                ['id' => Utils::uid(), 'type' => 'image-text', 'group' => 'main', 'data' => [
+                    'file' => ['id' => $this->shot( 'alerts' ), 'type' => 'file'],
+                    'position' => 'grid-end',
+                    'ratio' => '1-1',
+                    'text' => "Every monitor should belong to a team, and every team needs a schedule. When an alert has no owner, it ends up with whoever is most worried, and that's usually the person who is already on call far too often.\n\n- **One owner per monitor:** a team, not a person\n- **One schedule per team:** with a clear backup\n- **One place to look:** who is on call now and next",
+                ]],
+                ...$this->section( 'Rotate weekly and hand over on purpose', "One week is long enough to build context and short enough to recover. Hand over on a weekday morning, not on Friday evening, and spend ten minutes on open incidents, flaky monitors and planned deploys.\n\nThis is what a fair rotation for a team of five looks like:" ),
+                ['id' => Utils::uid(), 'type' => 'table', 'group' => 'main', 'data' => [
+                    'header' => 'row',
+                    'table' => [
+                        ['Week', 'Primary', 'Backup', 'Handover'],
+                        ['Oct 5', 'Maya', 'Daniel', 'Monday 10:00'],
+                        ['Oct 12', 'Daniel', 'Lea', 'Monday 10:00'],
+                        ['Oct 19', 'Lea', 'Arjun', 'Monday 10:00'],
+                        ['Oct 26', 'Arjun', 'Tom', 'Monday 10:00'],
+                        ['Nov 2', 'Tom', 'Maya', 'Monday 10:00'],
+                    ],
+                ]],
+                ...$this->section( 'Escalate slowly, but always', "Give the primary 15 minutes to acknowledge before the backup is paged, then another 15 minutes before the manager gets a call. Shorter delays turn every alert into a team event. Longer ones leave real outages unanswered." ),
+                ...$this->section( 'Pay for nights and weekends', "Time off in lieu or a flat on-call allowance makes rotations fairer and keeps experienced people in the schedule. Teams that pay for on-call have fewer people asking to be taken off the rotation." ),
+                ...$this->section( 'Review your alerts every month', "Once a month, look at every alert that paged someone. Delete the ones nobody acted on, tune the ones that fired too early and add the ones you missed. Relay's alert report shows the noisiest monitors at the top." ),
+                ['id' => Utils::uid(), 'type' => 'testimonial', 'group' => 'main', 'data' => [
+                    'items' => [
+                        ['text' => 'We went from 40 night-time pages a month to six. The only thing we changed was confirming alerts and deleting what nobody acted on.', 'name' => 'Lea Fischer', 'role' => 'Engineering Manager, Paperplane', 'file' => ['id' => $this->img( 'person-5' ), 'type' => 'file']],
+                    ],
+                ]],
+                ['id' => Utils::uid(), 'type' => 'questions', 'group' => 'main', 'data' => [
+                    'title' => 'Questions from readers',
+                    'items' => [
+                        ['title' => 'How many people do we need for a rotation?', 'text' => 'At least four, so nobody is on call more than one week a month. With fewer people, share a rotation with another team.'],
+                        ['title' => 'Should managers be on call?', 'text' => 'Yes, as the second escalation level. It keeps them close to the alert quality their team deals with.'],
+                        ['title' => 'What about follow-the-sun?', 'text' => 'If your team spans time zones, hand over at the end of each working day. Relay supports up to three handovers a day.'],
+                    ],
+                ]],
             ],
         );
 
@@ -183,18 +228,54 @@ class LaunchDemo extends AbstractDemo
             'title' => 'What Makes a Good Status Page During an Outage',
             'path' => 'status-pages',
         ], 'What makes a good status page during an outage',
-            "During an outage, your status page gets more visitors than your homepage. It's the one place where users decide whether to trust you or to open a support ticket.\n\nWe looked at 1,200 public incidents on Relay status pages and found four patterns that cut support tickets by half.",
+            "During an outage, your status page gets more visitors than your homepage. It's the one place where users decide whether to trust you or to open a support ticket.\n\nWe looked at 1,200 public incidents on Relay status pages and found four patterns that cut support tickets by half. None of them need a big team, just a few decisions made before the next outage.",
             'dashboard',
             [
-                ['title' => '−48%', 'text' => 'Support tickets with an update in the first 10 minutes'],
-                ['title' => '30 min', 'text' => 'Longest gap between updates users accept'],
-                ['title' => '6', 'text' => 'Components are enough for most products'],
-            ],
-            "## Post early, even if you don't know much\n\n\"We are investigating reports of slow page loads\" is a perfect first update. Silence is what makes users nervous.\n\n## Name components your users recognise\n\nUsers know the **dashboard**, **API** and **checkout**. They don't know your Kubernetes clusters. Group internal services below the parts of the product people actually use.\n\n## Keep a steady rhythm\n\nPromise the next update and keep the promise, even if nothing changed. Relay reminds the incident owner when an update is due.\n\n## Close with a short summary\n\nWhat happened, how long it lasted, who was affected and what you are changing. Link the full postmortem when it's ready.",
-            [
-                ['title' => 'Should we show uptime percentages?', 'text' => 'Yes, for the last 90 days. Hiding them makes people assume the worst.'],
-                ['title' => 'Can we use our own domain?', 'text' => 'On the Pro and Team plans you can use status.yourdomain.com with an automatic TLS certificate.'],
-                ['title' => 'Do we need private status pages?', 'text' => 'For internal tools and B2B customers with dedicated environments, yes. They are included in the Team plan.'],
+                ['id' => Utils::uid(), 'type' => 'cards', 'group' => 'main', 'data' => [
+                    'layout' => 'figures',
+                    'columns' => '3',
+                    'cards' => [
+                        ['title' => '−48%', 'text' => 'Support tickets with an update in the first 10 minutes'],
+                        ['title' => '30 min', 'text' => 'Longest gap between updates users accept'],
+                        ['title' => '6', 'text' => 'Components are enough for most products'],
+                    ],
+                ]],
+                ['id' => Utils::uid(), 'type' => 'text', 'group' => 'main', 'data' => [
+                    'text' => "## Post early, even if you don't know much\n\n\"We are investigating reports of slow page loads\" is a perfect first update. Silence is what makes users nervous. The teams with the fewest tickets posted their first update a median of six minutes after the first alert, long before they knew the cause.\n\nWrite the first update for your users, not for your engineers. Say what people notice, not which service failed.",
+                ]],
+                ['id' => Utils::uid(), 'type' => 'image-text', 'group' => 'main', 'data' => [
+                    'file' => ['id' => $this->shot( 'status' ), 'type' => 'file'],
+                    'position' => 'grid-start',
+                    'ratio' => '1-1',
+                    'text' => "## Name components your users recognise\n\nUsers know the **dashboard**, **API** and **checkout**. They don't know your Kubernetes clusters. Group internal services below the parts of the product people actually use and keep the list short.\n\n- **Website** and **dashboard** for everyone\n- **API** for developers and integrations\n- **Checkout** or **payments** if you sell online",
+                ]],
+                ['id' => Utils::uid(), 'type' => 'heading', 'group' => 'main', 'data' => [
+                    'title' => 'Keep a steady rhythm',
+                    'level' => '2',
+                ]],
+                ['id' => Utils::uid(), 'type' => 'text', 'group' => 'main', 'data' => [
+                    'text' => 'Promise the next update and keep the promise, even if nothing changed. Relay reminds the incident owner when an update is due. This is how a well-run incident looked on the status page of one of our customers:',
+                ]],
+                ['id' => Utils::uid(), 'type' => 'timeline', 'group' => 'main', 'data' => [
+                    'layout' => 'vertical',
+                    'items' => [
+                        ['label' => '14:06', 'title' => 'Investigating', 'text' => 'Some customers see errors when paying by card. We are looking into it and will update you within 30 minutes.'],
+                        ['label' => '14:21', 'title' => 'Identified', 'text' => 'A configuration change at our payment provider is rejecting some cards. We are switching to our backup provider.'],
+                        ['label' => '14:48', 'title' => 'Monitoring', 'text' => 'Payments work again for all cards. We are watching the error rate closely.'],
+                        ['label' => '15:20', 'title' => 'Resolved', 'text' => 'Card payments were unavailable for some customers for 42 minutes. No payment was charged twice. We will publish a full report this week.'],
+                    ],
+                ]],
+                ['id' => Utils::uid(), 'type' => 'text', 'group' => 'main', 'data' => [
+                    'text' => "## Close with a short summary\n\nWhat happened, how long it lasted, who was affected and what you are changing. Link the full postmortem when it's ready. Users forgive outages much more easily than they forgive being left in the dark.\n\n## Prepare your wording before you need it\n\nNobody writes well at 3 am. Save templates for the four states in Relay and you only have to fill in the details during an incident. Relay 3.0 even suggests the first update from the failing checks.",
+                ]],
+                ['id' => Utils::uid(), 'type' => 'questions', 'group' => 'main', 'data' => [
+                    'title' => 'Questions from readers',
+                    'items' => [
+                        ['title' => 'Should we show uptime percentages?', 'text' => 'Yes, for the last 90 days. Hiding them makes people assume the worst.'],
+                        ['title' => 'Can we use our own domain?', 'text' => 'On the Pro and Team plans you can use status.yourdomain.com with an automatic TLS certificate.'],
+                        ['title' => 'Do we need private status pages?', 'text' => 'For internal tools and B2B customers with dedicated environments, yes. They are included in the Team plan.'],
+                    ],
+                ]],
             ],
         );
 
@@ -203,18 +284,59 @@ class LaunchDemo extends AbstractDemo
             'title' => 'Blameless Incident Postmortems Your Team Actually Reads',
             'path' => 'incident-postmortems',
         ], 'Blameless postmortems your team actually reads',
-            "A postmortem is not a report for management. It's how your team learns from an outage so the same thing doesn't happen again.\n\nThis is the template we use at Relay. It fits on one page and takes about an hour to write.",
+            "A postmortem is not a report for management. It's how your team learns from an outage so the same thing doesn't happen again.\n\nThis is the template we use at Relay. It fits on one page, takes about an hour to write and is read by everyone in engineering, not just the people who were paged.",
             'planning',
             [
-                ['title' => '1 page', 'text' => 'Is enough for most incidents'],
-                ['title' => '5 days', 'text' => 'Write it while memories are fresh'],
-                ['title' => '3', 'text' => 'Action items at most, each with an owner'],
-            ],
-            "## Summary\n\nTwo or three sentences: what broke, for how long and who was affected.\n\n## Timeline\n\nFrom the first alert to the all-clear, in UTC. Relay exports the timeline of every incident, including who was paged and when.\n\n## Contributing factors\n\nAsk \"how did this make sense at the time?\" instead of \"who did this?\". Systems fail in combinations: a missing alert, a risky deploy and a busy Friday afternoon.\n\n## Action items\n\nPick no more than three changes, give each one an owner and a date, and track them like any other work.",
-            [
-                ['title' => 'Who should write the postmortem?', 'text' => 'The incident owner, with help from everyone involved. Review it together in a 30 minute meeting.'],
-                ['title' => 'Do small incidents need one?', 'text' => 'Write a short one for every incident that affected users. Skipping the small ones hides patterns.'],
-                ['title' => 'Should we publish them?', 'text' => 'A short public version builds trust. Leave out internal names and security details.'],
+                ['id' => Utils::uid(), 'type' => 'cards', 'group' => 'main', 'data' => [
+                    'layout' => 'figures',
+                    'columns' => '3',
+                    'cards' => [
+                        ['title' => '1 page', 'text' => 'Is enough for most incidents'],
+                        ['title' => '5 days', 'text' => 'Write it while memories are fresh'],
+                        ['title' => '3', 'text' => 'Action items at most, each with an owner'],
+                    ],
+                ]],
+                ['id' => Utils::uid(), 'type' => 'text', 'group' => 'main', 'data' => [
+                    'text' => "## Why blameless matters\n\nIf people expect to be blamed, they leave out the details that matter most: the shortcut they took, the alert they ignored, the dashboard they couldn't find. A blameless postmortem assumes everyone acted reasonably with what they knew at the time, and asks why the system made the mistake easy.\n\nThat doesn't mean nobody is responsible. It means the team is responsible for making the same mistake harder next time.",
+                ]],
+                ['id' => Utils::uid(), 'type' => 'timeline', 'group' => 'main', 'data' => [
+                    'title' => 'From the all-clear to the review',
+                    'layout' => 'horizontal',
+                    'items' => [
+                        ['label' => 'Day 0', 'title' => 'Export the timeline', 'text' => 'Relay saves alerts, pages and status updates of the incident.'],
+                        ['label' => 'Day 1–3', 'title' => 'Write the draft', 'text' => 'The incident owner fills in the template with everyone involved.'],
+                        ['label' => 'Day 4', 'title' => 'Review together', 'text' => 'A 30 minute meeting to agree on the contributing factors.'],
+                        ['label' => 'Day 5', 'title' => 'Share and track', 'text' => 'Publish it internally and add the action items to your backlog.'],
+                    ],
+                ]],
+                ['id' => Utils::uid(), 'type' => 'text', 'group' => 'main', 'data' => [
+                    'text' => "## The template\n\nCopy it into your wiki or your repository. Every section has a question it answers, and if a section doesn't apply, leave it out.",
+                ]],
+                ['id' => Utils::uid(), 'type' => 'code', 'group' => 'main', 'data' => [
+                    'language' => 'markdown',
+                    'text' => "# Postmortem: <short title>\n\n## Summary\nWhat broke, for how long and who was affected? (2-3 sentences)\n\n## Impact\nUsers affected, failed requests, support tickets, revenue\n\n## Timeline (UTC)\n- 14:02 First alert from checkout-api\n- 14:04 Acknowledged by the on-call engineer\n- 14:06 First status page update\n- 14:31 Rollback of deploy #4812\n- 14:44 All-clear\n\n## Contributing factors\nHow did this make sense at the time?\n\n## What went well\n\n## Action items\n| Action | Owner | Due |\n|--------|-------|-----|",
+                ]],
+                ['id' => Utils::uid(), 'type' => 'text', 'group' => 'main', 'data' => [
+                    'text' => "## Contributing factors, not root causes\n\nAsk \"how did this make sense at the time?\" instead of \"who did this?\". Systems fail in combinations: a missing alert, a risky deploy and a busy Friday afternoon. Looking for the single root cause usually ends at the last person who touched something.\n\n## Action items that get done\n\nPick no more than three changes, give each one an owner and a date, and track them like any other work. A long list of good intentions is the main reason why postmortems stop being read.",
+                ]],
+                ['id' => Utils::uid(), 'type' => 'table', 'group' => 'main', 'data' => [
+                    'title' => 'Example action items',
+                    'header' => 'row',
+                    'table' => [
+                        ['Action', 'Owner', 'Due'],
+                        ['Alert when the database pool is 80% full', 'Daniel', 'Oct 20'],
+                        ['Run a canary for 10 minutes before full deploys', 'Arjun', 'Oct 31'],
+                        ['Add checkout to the public status page', 'Sofia', 'Oct 17'],
+                    ],
+                ]],
+                ['id' => Utils::uid(), 'type' => 'questions', 'group' => 'main', 'data' => [
+                    'title' => 'Questions from readers',
+                    'items' => [
+                        ['title' => 'Who should write the postmortem?', 'text' => 'The incident owner, with help from everyone involved. Review it together in a 30 minute meeting.'],
+                        ['title' => 'Do small incidents need one?', 'text' => 'Write a short one for every incident that affected users. Skipping the small ones hides patterns.'],
+                        ['title' => 'Should we publish them?', 'text' => 'A short public version builds trust. Leave out internal names and security details.'],
+                    ],
+                ]],
             ],
         );
 
@@ -299,7 +421,7 @@ class LaunchDemo extends AbstractDemo
                     ['field' => 'name', 'required' => true, 'input' => 'text'],
                     ['field' => 'email', 'required' => true, 'input' => 'text'],
                     ['field' => 'company', 'required' => false, 'input' => 'text'],
-                    ['field' => 'Message', 'required' => true, 'input' => 'textarea'],
+                    ['field' => 'monitors', 'required' => false, 'input' => 'select', 'options' => "Less than 50\n50 to 250\nMore than 250"],
                 ],
             ]],
         ], $home );
@@ -834,16 +956,33 @@ SVG;
      */
     protected function brands() : array
     {
+        $marks = [
+            'Northwind' => ['#0EA5E9', '<path d="M18 4l9 28-9-6-9 6z" fill="#0EA5E9"/><path d="M18 4v22l-9 6z" fill="#0284C7"/>'],
+            'Kestrel' => ['#F97316', '<path d="M4 26c6-1 10-5 14-14 2 6 6 10 14 10-6 4-14 6-28 4z" fill="#F97316"/><circle cx="24" cy="14" r="2.5" fill="#F97316"/>'],
+            'Orbital' => ['#8B5CF6', '<circle cx="18" cy="18" r="7" fill="#8B5CF6"/><ellipse cx="18" cy="18" rx="15" ry="6" fill="none" stroke="#8B5CF6" stroke-width="2.5" transform="rotate(-25 18 18)"/>'],
+            'Tidewave' => ['#14B8A6', '<path d="M3 15c5-6 10-6 15 0s10 6 15 0M3 24c5-6 10-6 15 0s10 6 15 0" fill="none" stroke="#14B8A6" stroke-width="3.5" stroke-linecap="round"/>'],
+            'Paperplane' => ['#3B82F6', '<path d="M3 17L33 5 25 31 17 22z" fill="#3B82F6"/><path d="M17 22l16-17-12 21z" fill="#1D4ED8"/>'],
+            'Quanta' => ['#EC4899', '<path d="M18 3l13 7.5v15L18 33 5 25.5v-15z" fill="none" stroke="#EC4899" stroke-width="3"/><circle cx="18" cy="18" r="4.5" fill="#EC4899"/>'],
+        ];
+
+        $cards = [];
+
+        foreach( $marks as $name => [$color, $mark] )
+        {
+            $width = 48 + strlen( $name ) * 13;
+            $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' . $width . ' 36" role="img"><title>' . $name . '</title>'
+                . $mark . '<text x="44" y="26" fill="#71717A" font-family="system-ui, -apple-system, \'Segoe UI\', sans-serif" font-size="22" font-weight="700" letter-spacing="-0.5">' . $name . '</text></svg>';
+
+            $this->brands[$name] ??= $this->svgFile( $svg, strtolower( $name ) . '-logo.svg', $name . ' logo',
+                'Logo of ' . $name . ': ' . $color . ' symbol beside the wordmark ' . $name, true );
+
+            $cards[] = ['file' => ['id' => $this->brands[$name], 'type' => 'file']];
+        }
+
         return ['id' => Utils::uid(), 'type' => 'cards', 'group' => 'main', 'data' => [
+            'title' => 'Trusted by 4,000+ engineering teams',
             'layout' => 'badges',
-            'cards' => [
-                ['title' => 'Northwind'],
-                ['title' => 'Kestrel'],
-                ['title' => 'Orbital'],
-                ['title' => 'Tidewave'],
-                ['title' => 'Paperplane'],
-                ['title' => 'Quanta'],
-            ],
+            'cards' => $cards,
         ]];
     }
 
@@ -972,13 +1111,10 @@ SVG;
      * @param string $title Article headline
      * @param string $intro Article introduction
      * @param string $cover PHOTOS key of the cover image
-     * @param array<int, array<string, string>> $facts Key facts as figure cards
-     * @param string $text Article body as Markdown
-     * @param array<int, array<string, string>> $questions Frequently asked questions
+     * @param array<int, array<string, mixed>> $content Content elements of the article body
      * @return Page Created page
      */
-    protected function post( Page $parent, array $data, string $title, string $intro, string $cover,
-        array $facts, string $text, array $questions ) : Page
+    protected function post( Page $parent, array $data, string $title, string $intro, string $cover, array $content ) : Page
     {
         return $this->page( $data + [
             'lang' => 'en',
@@ -986,18 +1122,7 @@ SVG;
             'status' => 2,
         ], [
             $this->article( $title, $intro, $this->img( $cover ) ),
-            ['id' => Utils::uid(), 'type' => 'cards', 'group' => 'main', 'data' => [
-                'layout' => 'figures',
-                'columns' => '3',
-                'cards' => $facts,
-            ]],
-            ['id' => Utils::uid(), 'type' => 'text', 'group' => 'main', 'data' => [
-                'text' => $text,
-            ]],
-            ['id' => Utils::uid(), 'type' => 'questions', 'group' => 'main', 'data' => [
-                'title' => 'Questions from readers',
-                'items' => $questions,
-            ]],
+            ...$content,
             $this->cta(),
         ], $parent );
     }
@@ -1038,6 +1163,22 @@ SVG;
             ['text' => 'Setting up monitors with Terraform took one afternoon for 400 services. The API is a joy to work with.', 'name' => 'Arjun Mehta', 'role' => 'Platform Engineer, Tidewave', 'file' => ['id' => $this->img( 'person-4' ), 'type' => 'file']],
             ['text' => 'Fair rotations and overrides in two clicks. Nobody complains about on-call anymore.', 'name' => 'Lea Fischer', 'role' => 'Engineering Manager, Paperplane', 'file' => ['id' => $this->img( 'person-5' ), 'type' => 'file']],
             ['text' => 'Relay caught an expiring SSL certificate three weeks before it would have taken down checkout.', 'name' => 'Tom Walsh', 'role' => 'CTO, Quanta', 'file' => ['id' => $this->img( 'person-6' ), 'type' => 'file']],
+        ];
+    }
+
+
+    /**
+     * Returns a heading and its text as two content elements.
+     *
+     * @param string $title Section headline
+     * @param string $text Section text as Markdown
+     * @return array<int, array<string, mixed>> Heading and text content elements
+     */
+    protected function section( string $title, string $text ) : array
+    {
+        return [
+            ['id' => Utils::uid(), 'type' => 'heading', 'group' => 'main', 'data' => ['title' => $title, 'level' => '2']],
+            ['id' => Utils::uid(), 'type' => 'text', 'group' => 'main', 'data' => ['text' => $text]],
         ];
     }
 

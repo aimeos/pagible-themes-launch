@@ -88,12 +88,12 @@
                 "signin": {
                     "type": "string",
                     "label": "Sign in link",
-                    "hint": "Link to the login of your app, shown as \"Sign in\" in the header"
+                    "hint": "Link to the login of your app, shown as \"Sign in\" in the header if there is no login route"
                 },
                 "signup": {
                     "type": "string",
                     "label": "Sign up link",
-                    "hint": "Link to the sign up or pricing page, shown as \"Get started\" button in the header"
+                    "hint": "Link to the sign up or pricing page, shown as \"Get started\" button in the header if there is no register route"
                 },
                 "status": {
                     "type": "string",
