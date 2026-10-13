@@ -103,6 +103,7 @@ class LaunchDemoTest extends ThemeTestAbstract
         $response->assertSee( 'Relay 3.0 is here: AI incident summaries' );
         $response->assertSee( '<li class="login">', false );
         $response->assertSee( '<li class="signup">', false );
+        $response->assertSee( '<a href="http://localhost/contact">Get started</a>', false );
         $response->assertSee( 'Get started' );
         $response->assertSee( 'System status' );
         $response->assertSee( 'SOC 2 Type II certified · GDPR compliant · Data hosted in the EU and US' );

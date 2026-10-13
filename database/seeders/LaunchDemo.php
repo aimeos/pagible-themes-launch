@@ -809,8 +809,6 @@ class LaunchDemo extends AbstractDemo
                     'description' => 'Uptime monitoring, on-call alerts and status pages for engineering teams.',
                     'announcement' => 'Relay 3.0 is here: AI incident summaries',
                     'announcement-link' => '/changelog',
-                    'signin' => '/contact',
-                    'signup' => '/signup',
                     'status' => 'https://status.relay.example',
                     'price' => '0',
                     'currency' => 'USD',

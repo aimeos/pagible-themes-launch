@@ -285,48 +285,57 @@ footer.bottom .container {
 /* Content tables (markdown/HTML) — mirrors table.css .table-responsive */
 .cms-content table {
     width: 100%;
+    margin-bottom: var(--pico-typography-spacing-vertical);
+    overflow: hidden;
+    border: 1px solid var(--pico-muted-border-color);
     border-collapse: separate;
     border-spacing: 0;
+    border-radius: calc(var(--pico-border-radius) * 1.5);
+    box-shadow: 0 1px 2px #09090B0D, 0 0.75rem 2rem -1.5rem #09090B26;
+    font-variant-numeric: tabular-nums;
 }
 
 .cms-content th,
 .cms-content td {
-    padding: calc(var(--pico-spacing) / 2) var(--pico-spacing);
+    padding: 0.875rem 1.25rem;
+    background-color: var(--pico-card-background-color);
     border-bottom: 1px solid var(--pico-muted-border-color);
+    text-align: start;
     vertical-align: middle;
 }
 
-.cms-content th {
-    font-weight: 500;
-    font-size: calc(var(--pico-font-size) * 0.85);
-    letter-spacing: 0.04em;
-    color: var(--pico-contrast);
-    text-transform: uppercase;
-    text-align: center;
+.cms-content tr:last-child > :is(th, td) {
+    border-bottom: 0;
 }
 
-.cms-content th:first-child {
-    text-align: start;
+.cms-content thead th {
+    padding-block: 0.75rem;
+    color: var(--pico-muted-color);
+    font-size: calc(var(--pico-font-size) * 0.75);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background-color: var(--pico-card-sectioning-background-color);
+}
+
+.cms-content tbody th {
+    color: var(--pico-contrast);
+    font-weight: 600;
 }
 
 .cms-content td {
-    text-align: center;
+    color: var(--pico-color);
+    font-size: calc(var(--pico-font-size) * 0.95);
 }
 
-.cms-content th > *:first-child,
-.cms-content td > *:first-child {
+.cms-content tbody tr:hover > :is(th, td) {
+    background-color: color-mix(in srgb, var(--pico-primary) 5%, var(--pico-card-background-color));
+}
+
+.cms-content :is(th, td) > :first-child {
     margin-top: 0;
 }
 
-.cms-content th > *:last-child,
-.cms-content td > *:last-child {
+.cms-content :is(th, td) > :last-child {
     margin-bottom: 0;
-}
-
-.cms-content th img {
-    display: block;
-    margin-top: 0.75rem;
-    margin-bottom: 0.75rem;
-    height: 100%;
-    width: 100%;
 }

@@ -217,16 +217,14 @@
                                 {{ __('Sign in') }}
                             </a>
                         </li>
-                    @elseif($signin = cmslink($product->signin ?? null))
+                    @else
                         <li class="signin">
-                            <a href="{{ $signin }}">{{ __('Sign in') }}</a>
+                            <a href="{{ url('contact') }}">{{ __('Sign in') }}</a>
                         </li>
                     @endif
-                    @if($signup = Route::has('register') ? route('register') : cmslink($product->signup ?? null))
-                        <li class="signup">
-                            <a href="{{ $signup }}">{{ __('Get started') }}</a>
-                        </li>
-                    @endif
+                    <li class="signup">
+                        <a href="{{ Route::has('register') ? route('register') : url('contact') }}">{{ __('Get started') }}</a>
+                    </li>
                 </ul>
                 <ul class="menu-open show">
                     <li>
